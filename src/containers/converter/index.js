@@ -117,7 +117,7 @@ class Converter extends Component {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Button>Submit</Form.Button>
+            <Form.Button>Calculate</Form.Button>
             <Form.Button onClick={this.switchBases}>Switch bases</Form.Button>
           </Form.Group>
         </Form>
