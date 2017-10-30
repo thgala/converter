@@ -31,16 +31,25 @@ class Converter extends Component {
   }
 
   onInputChange(event) {
-    const { onUpdate, activeSettings, ratesList } = this.props
+    const { onUpdate } = this.props
+    const value = event.target.value
 
-    // onUpdate(activeSettings)
-    // if (!/^[0-9]+$/.test(e.value))
+    if (/^[0-9]*\.?[0-9]*$/.test(value)) {
+      onUpdate({
+        amountIn: value,
+      })
+    }
   }
 
-  onSelectChange(event) {
-    const { onUpdate, activeSettings, ratesList } = this.props
+  onSelectChange(event, fieldName) {
+    const { onUpdate } = this.props
+    const value = event.target.value
 
-    // onUpdate(activeSettings)
+    console.log('event', event)
+
+    onUpdate({
+      [fieldName]: value,
+    })
   }
 
   switchBases(event) {
@@ -59,6 +68,8 @@ class Converter extends Component {
   render() {
     const { activeSettings } = this.props
 
+    console.log('activeSettings', activeSettings)
+
     return (
       <div>
         <Form onSubmit={this.calculate}>
@@ -67,14 +78,14 @@ class Converter extends Component {
             <Form.Select
               value={activeSettings.from}
               label='Currency from'
-              onChange={this.onInputChange}
+              onChange={e => this.onSelectChange(e, 'from')}
               options={this.options}
               placeholder='Currency from'
             />
             <Form.Select
               value={activeSettings.to}
               label='Currency to'
-              onChange={this.onInputChange}
+              onChange={e => this.onSelectChange(e, 'to')}
               options={this.options}
               placeholder='Currency to'
             />
