@@ -11,10 +11,10 @@ class Initialise extends Component {
     super(props)
 
     this.state = {
-      ratesList: props.ratesList.concat([{
+      ratesList: [{
         currency: props.ratesBase,
         rate: '1',
-      }]),
+      }].concat(props.ratesList),
       historyList: [],
       activeSettings: {
         from: props.ratesBase,
@@ -30,19 +30,21 @@ class Initialise extends Component {
 
   setActiveSettings(settings){
     this.setState(prevState => ({
-      activeSettings: Object.assign({}, prevState.activeSettings, settings)
+      activeSettings: Object.assign({}, prevState.activeSettings, settings),
+      amountOut: null,
     }))
   }
 
-  updateHistory(settings){
+  updateHistory(conversion, amountOut){
     this.setState(prevState => ({
-      historyList: prevState.historyList.concat([settings])
+      historyList: prevState.historyList.concat([conversion]),
+      amountOut,
     }))
   }
 
 
   render() {
-    const { ratesList, historyList, activeSettings } = this.state
+    const { ratesList, historyList, activeSettings, amountOut } = this.state
 
     return (
       <div>
@@ -50,6 +52,7 @@ class Initialise extends Component {
           <Grid.Row>
             <Grid.Column mobile={16} tablet={16} computer={11}>
               <Converter
+                amountOut={amountOut}
                 ratesList={ratesList}
                 activeSettings={activeSettings}
                 onUpdate={this.setActiveSettings}
