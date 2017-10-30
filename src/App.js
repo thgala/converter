@@ -15,7 +15,8 @@ class App extends Component {
     super(props)
 
     this.state = {
-      currencyList: [],
+      ratesList: [],
+      ratesBase: '',
       fetchError: false,
       loading: false,
     }
@@ -24,20 +25,24 @@ class App extends Component {
   componentDidMount() {
     this.setState({ loading: true })
     getCurrenciesRatesWithDelay()
-      .then(result => this.setState({ loading: false, currencyList: result.data, }))
+      .then(result => {
+        const { data } = result
+        this.setState({ loading: false, ratesList: data.rates, ratesBase: data.base, })
+      })
       .catch(error => this.setState({ loading: false, fetchError: true, }))
   }
 
   render() {
     const
-      { currencyList, loading, fetchError } = this.state
+      { ratesList, ratesBase, loading, fetchError } = this.state
 
     const content = fetchError
       ? <Note title={generalErrorTitle} text={generalErrorText} />
       : <Container>
           <Note title={generalTitle} text={generalText} />
           <Initialise
-            currencyList={currencyList}
+            ratesList={ratesList}
+            ratesBase={ratesBase}
           />
         </Container>
 

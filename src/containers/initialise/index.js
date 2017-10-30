@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Grid } from 'semantic-ui-react'
 
 import Converter from '../converter'
 import History from '../../components/history'
@@ -10,20 +11,17 @@ class Initialise extends Component {
     super(props)
 
     this.state = {
-      currencyList: props.currencyList,
+      ratesList: props.ratesList.concat([{
+        currency: props.ratesBase,
+        rate: '1',
+      }]),
       historyList: [],
       activeSettings: {
-        fr: {
-          currency: '',
-          rate: '',
-        },
-        to: {
-          currency: '',
-          rate: '',
-        },
-        amountIn: null,
-        amountOut: null,
-      }
+        from: props.ratesBase,
+        to: '',
+        amountIn: 0,
+      },
+      amountOut: null,
     }
 
     this.setActiveSettings = this.setActiveSettings.bind(this)
@@ -44,27 +42,41 @@ class Initialise extends Component {
 
 
   render() {
-    const { currencyList, historyList, activeSettings } = this.state
+    const { ratesList, historyList, activeSettings } = this.state
 
     return (
       <div>
-        <Converter
-          currencyList={currencyList}
-          activeSettings={activeSettings}
-          onUpdate={this.setActiveSettings}
-          onSubmit={this.updateHistory}
-        />
-        <History
-          list={historyList}
-          onItemClick={this.setActiveSettings}
-        />
+        <Grid stackable>
+          <Grid.Row>
+            <Grid.Column mobile={16} tablet={16} computer={11}>
+              <Converter
+                ratesList={ratesList}
+                activeSettings={activeSettings}
+                onUpdate={this.setActiveSettings}
+                onSubmit={this.updateHistory}
+              />
+            </Grid.Column>
+            <Grid.Column mobile={16} tablet={16} computer={5}>
+              <History
+                list={historyList}
+                onItemClick={this.setActiveSettings}
+              />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </div>
     )
   }
 }
 
+Initialise.defaultProps = {
+  ratesList: [],
+  ratesBase: '',
+}
+
 Initialise.propTypes = {
-  currencyList: PropTypes.array,
+  ratesList: PropTypes.array,
+  ratesBase: PropTypes.string,
 }
 
 export default Initialise

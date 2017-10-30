@@ -1,49 +1,107 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Form } from 'semantic-ui-react'
+
+const options = [
+  { key: 'm', text: 'Male', value: 'male' },
+  { key: 'f', text: 'Female', value: 'female' },
+]
 
 class Converter extends Component {
-
   constructor(props) {
     super(props)
 
+    this.options = this.optionsList.call(this)
+
+    this.optionsList = this.optionsList.bind(this)
+    this.onInputChange = this.onInputChange.bind(this)
+    this.onSelectChange = this.onSelectChange.bind(this)
+    this.switchBases = this.switchBases.bind(this)
     this.calculate = this.calculate.bind(this)
   }
 
-  calculate() {
-    const { onSubmit, activeSettings } = this.props
+  optionsList() {
+    const { ratesList } = this.props
 
-    onSubmit(activeSettings)
+    return ratesList.map(rate => ({
+      key: rate.currency,
+      text: rate.currency,
+      value: rate.currency,
+    }))
+  }
+
+  onInputChange(event) {
+    const { onUpdate, activeSettings, ratesList } = this.props
+
+    // onUpdate(activeSettings)
+    // if (!/^[0-9]+$/.test(e.value))
+  }
+
+  onSelectChange(event) {
+    const { onUpdate, activeSettings, ratesList } = this.props
+
+    // onUpdate(activeSettings)
+  }
+
+  switchBases(event) {
+
+
+    event.preventDefault()
+  }
+
+  calculate(event) {
+    const { onSubmit, activeSettings, ratesList } = this.props
+
+
+    // onSubmit(activeSettings)
   }
 
   render() {
+    const { activeSettings } = this.props
+
     return (
       <div>
-        Converter
+        <Form onSubmit={this.calculate}>
+          <Form.Group widths='equal'>
+            <Form.Input label='Amount' placeholder='Amount' value={activeSettings.amountIn} onChange={this.onInputChange} />
+            <Form.Select
+              value={activeSettings.from}
+              label='Currency from'
+              onChange={this.onInputChange}
+              options={this.options}
+              placeholder='Currency from'
+            />
+            <Form.Select
+              value={activeSettings.to}
+              label='Currency to'
+              onChange={this.onInputChange}
+              options={this.options}
+              placeholder='Currency to'
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Button>Submit</Form.Button>
+            <Form.Button onClick={this.switchBases}>Switch bases</Form.Button>
+          </Form.Group>
+        </Form>
       </div>
     )
   }
 }
 
 Converter.defaultProps = {
-  currencyList: [],
+  ratesList: [],
   activeSettings: {
-    fr: {
-      currency: '',
-      rate: '',
-    },
-    to: {
-      currency: '',
-      rate: '',
-    },
+    from: '',
+    to: '',
     amountIn: null,
-    amountOut: null,
   },
   onUpdate: () => {},
   onSubmit: () => {},
 }
 
 Converter.propTypes = {
-  currencyList: PropTypes.array,
+  ratesList: PropTypes.array,
   activeSettings: PropTypes.object,
   onUpdate: PropTypes.func,
   onSubmit: PropTypes.func,
