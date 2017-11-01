@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { List, Header } from 'semantic-ui-react'
+import { repeatConvertationText, noConvertations } from '../../mock/text'
 import './index.css'
 
 
@@ -19,13 +20,13 @@ const History = ({ list, onItemClick }) => {
                   <List.Header as='a' onClick={e => {
                     e.preventDefault()
                     onItemClick(item)
-                  }}>Repeat convertation</List.Header>
+                  }}>{repeatConvertationText}</List.Header>
                 </List.Content>
               </List.Item>
             )}
           </List>
         ) : (
-          <p>There are no convertaions done yet</p>
+          <p>{noConvertations}</p>
         )}
       </div>
     </div>
