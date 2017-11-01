@@ -1,3 +1,11 @@
-.ContentTable{
-  margin-bottom: 30px;
+.History{
+
+}
+
+.History-wrap {
+  background: rgba(238, 238, 238, 0.3);
+  padding: 30px;
+  display: inline-flex;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  width: 100%;
 }

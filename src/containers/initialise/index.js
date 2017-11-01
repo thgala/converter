@@ -5,7 +5,7 @@ import { Grid } from 'semantic-ui-react'
 import Converter from '../converter'
 import History from '../../components/history'
 
-class Initialise extends Component {
+class Initialise_Container extends Component {
 
   constructor(props){
     super(props)
@@ -15,7 +15,7 @@ class Initialise extends Component {
         currency: props.ratesBase,
         rate: '1',
       }].concat(props.ratesList),
-      historyList: [],
+      historyList: this.loadHistoryFromLocalStorage(),
       activeSettings: {
         from: props.ratesBase,
         to: '',
@@ -26,6 +26,8 @@ class Initialise extends Component {
 
     this.setActiveSettings = this.setActiveSettings.bind(this)
     this.updateHistory = this.updateHistory.bind(this)
+    this.saveHistoryToLocalStorage = this.saveHistoryToLocalStorage.bind(this)
+    this.loadHistoryFromLocalStorage = this.loadHistoryFromLocalStorage.bind(this)
   }
 
   setActiveSettings(settings){
@@ -36,12 +38,26 @@ class Initialise extends Component {
   }
 
   updateHistory(conversion, amountOut){
-    this.setState(prevState => ({
-      historyList: prevState.historyList.concat([conversion]),
+    const { historyList } = this.state
+    const newHistoryList = [conversion].concat(historyList)
+
+    this.saveHistoryToLocalStorage(newHistoryList)
+    this.setState({
+      historyList: newHistoryList,
       amountOut,
-    }))
+    })
   }
 
+  saveHistoryToLocalStorage(list){
+    localStorage.setItem('history', JSON.stringify(list))
+  }
+
+  loadHistoryFromLocalStorage(){
+    const storedHistory = localStorage.getItem('history')
+    const parsedHistory = JSON.parse(storedHistory) || []
+
+    return parsedHistory
+  }
 
   render() {
     const { ratesList, historyList, activeSettings, amountOut } = this.state
@@ -72,14 +88,14 @@ class Initialise extends Component {
   }
 }
 
-Initialise.defaultProps = {
+Initialise_Container.defaultProps = {
   ratesList: [],
   ratesBase: '',
 }
 
-Initialise.propTypes = {
+Initialise_Container.propTypes = {
   ratesList: PropTypes.array,
   ratesBase: PropTypes.string,
 }
 
-export default Initialise
+export default Initialise_Container

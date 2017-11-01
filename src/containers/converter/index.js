@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Form } from 'semantic-ui-react'
 import DisplayNumber from '../../components/displayNumber'
 
-class Converter extends Component {
+class Converter_Container extends Component {
   constructor(props) {
     super(props)
 
@@ -73,11 +73,11 @@ class Converter extends Component {
       const amountOut = (parseFloat(amountIn) / parseFloat(fromRateObj.rate) * parseFloat(toRateObj.rate)).toFixed(4)
 
       onSubmit({
-        timestamp: Date.now(),
+        datetime: new Date().toISOString(),
         from,
         to,
         amountIn,
-        amountOut
+        amountOut,
       }, amountOut)
     }
   }
@@ -85,11 +85,10 @@ class Converter extends Component {
   render() {
     const { activeSettings, amountOut } = this.props
     const { submited } = this.state
-
-    console.log('amountOut', amountOut)
+    const wrapStyles = { marginBottom: '30px' }
 
     return (
-      <div>
+      <div style={wrapStyles}>
         <Form onSubmit={this.calculate}>
           <Form.Group widths='equal'>
             <Form.Input
@@ -132,7 +131,7 @@ class Converter extends Component {
   }
 }
 
-Converter.defaultProps = {
+Converter_Container.defaultProps = {
   ratesList: [],
   activeSettings: {
     from: '',
@@ -143,11 +142,11 @@ Converter.defaultProps = {
   onSubmit: () => {},
 }
 
-Converter.propTypes = {
+Converter_Container.propTypes = {
   ratesList: PropTypes.array,
   activeSettings: PropTypes.object,
   onUpdate: PropTypes.func,
   onSubmit: PropTypes.func,
 }
 
-export default Converter
+export default Converter_Container
